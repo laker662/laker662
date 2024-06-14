@@ -1,0 +1,103 @@
+    #!/bin/bash
+  
+    echo "Hello, $(whoami)! "
+  
+  
+  
+    main_pole()
+    {
+    echo "Выберите вариант:"
+    echo "1. Получить факт о котах"
+    echo "2. Получить картинку кота"
+    echo "3. Получить бесполезный факт"
+ 13 echo "4. Загрузить файл в Virustotal"
+ 14 echo "5. Отправить сообщение в Telegramm"
+ 15 echo "6. Выход"
+ 16 }
+ 17
+ 18 #1
+ 19 papa_show_env()
+ 20 {
+ 21 echo "Получаем факт о котах... "
+ 22 fact=$(curl --fail --silent https://meowfacts.herokuapp.com/?lang=rus | jq '.data[]')
+ 23 echo "Факт о котах: $fact"
+ 24 echo -n "Enter продолжить"
+ 25 read test
+ 26
+ 27 }
+ 28
+ 29 #2
+ 30 babushka_show_date()
+ 31 {
+ 32 echo "Загрузка изобрпжения кота... "
+ 33 echo "Выберите номер изображения от 100-103, 200-208, 214, 226, 300-308, 400-429, 431, 444, 450-451, 497-511, 521-523, 525, 530, 599"
+ 34 read kotik
+ 35 fact=$(curl -O --fail --silent https://http.cat/$kotik.jpg > $kotik.jpg)
+ 36 echo "Фото загружено под номером $kotik"
+ 37
+ 38 }
+ 39
+ 40 #3
+ 41 dedushka_show_dist()
+ 42 {
+ 43 echo "Получить бесполезный факт: "
+ 44 echo "1 - Сегодняшний"
+ 45 echo "2 - Рандомный"
+ 46 echo "3 - Отмена"
+ 47 read useless
+ 48 case $useless in
+ 49     1)echo "Сегодняшний бесполезный факт: "
+ 50       curl --fail --silent -H "Accept: application/json" "https://uselessfacts.jsph.pl/api/v2/facts/today?language=en" | jq .text
+ 51       ;;
+ 52     2)echo "Рандомный бесполезный факт: "
+ 53       curl --fail --silent -H "Accept: application/json" "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en" | jq .text
+ 54       ;;
+ 55     3)exit 0
+ 56       ;;
+ 57 esac
+ 58 }
+
+ 60 #4
+ 61 brat_show_pogoda()
+ 62 {
+ 63 echo "Введите название файла, который будет загружен: "
+ 64 read name
+ 65 cite=$(curl --show-error --fail --silent --request POST --url  https://www.virustotal.com/api/v3/files --header "Accept: application/json" --header "Content-type: multipart/form-data" --header 'x-apikey: 79bb77fb1d97997710295081a4d5>
+ 66 echo $cite
+ 67 if [ $cite == '"analysis"' ]; then
+ 68     echo "Файл успешно загружен"
+ 69 else
+ 70     echo "Файл не загружен"
+ 71 fi
+ 72 echo "Enter продолжить..."
+ 73 read test
+ 74 }
+ 75
+ 76 #5
+ 77 sestra_generate_sshkey()
+ 78 {
+ 79 echo "Введите сообщение: "
+ 80 read sms
+ 81 TOKEN="7347162680:AAHTNV2cAHKDm-mFJF_vMSGSZppEfcTqhkc"
+ 82 CHAT_ID="792169353"
+ 83 curl -o json.json --fail --silent -X POST https://api.telegram.org/bot$TOKEN/sendMessage -H 'Content-Type: application/json' -d '{"chat_id": "'$CHAT_ID'", "text": "'$SMS'"}'
+ 84 echo "Отправлено, Enter продолжить"
+ 85 read test
+ 86 }
+ 87
+ 88
+ 89 while true; do
+ 90         main_pole
+ 91         read -p "Выберите поле: " option
+ 92         case $option in
+ 93         1) papa_show_env ;;
+ 94         2) babushka_show_date ;;
+ 95         3) dedushka_show_dist ;;
+ 96         4) brat_show_pogoda ;;
+ 97         5) sestra_generate_sshkey ;;
+ 98         6) exit 0 ;;
+ 99         *) echo "Invalid option, please try again." ;;
+100         esac
+101 done
+102
+
